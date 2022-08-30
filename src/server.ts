@@ -4,6 +4,7 @@ import helmet from "helmet";
 import mongoose from "mongoose";
 import compression from "compression";
 import cors from "cors";
+import userRoutes from "./routes/user";
 
 class Server {
   public app: express.Application;
@@ -39,7 +40,9 @@ class Server {
     }
   }
 
-  routes() {}
+  routes() {
+    this.app.use("/api/user", userRoutes);
+  }
 
   start() {
     this.app.listen(this.app.get("port"), () => {
