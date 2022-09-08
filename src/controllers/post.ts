@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { validationResult } from "express-validator";
 import Post from "../models/post";
 
 const fetchPosts = async (req: Request, res: Response, next: NextFunction) => {
-  const { ownerId } = req.params;
+  const ownerId = req.params;
   let posts;
 
   try {
-    posts = await Post.find({ ownerId })
+    posts = await Post.find( ownerId )
       .populate("ownerId", "-_id -updatedAt -password")
       .sort("createdAt");
   } catch (error) {
@@ -17,14 +16,14 @@ const fetchPosts = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getPost = async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params;
+  const { postId } = req.params;
 
-  if (!id) {
-    return res.status(400).json({ errors: "Id es necessary" });
+  if (!postId) {
+    return res.status(400).json({ errors: "Post id es necessary" });
   }
 
   try {
-    const posts = await Post.findOne({ _id: id }).populate(
+    const posts = await Post.findOne({ _id: postId }).populate(
       "ownerId",
       "-_id -updatedAt -password -__v"
     );
@@ -36,7 +35,6 @@ const getPost = async (req: Request, res: Response, next: NextFunction) => {
 
 const createPost = async (req: Request, res: Response, next: NextFunction) => {
   const ownerId = res.locals.jwt.id;
-  console.log(ownerId);
   const newPost = new Post({ ownerId });
 
   let title = req.body && req.body.title ? req.body.title : null;

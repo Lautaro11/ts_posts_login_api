@@ -4,7 +4,8 @@ import IUser from "../interfaces/user";
 const UserSchema = new Schema(
   {
     password: { type: String, required: true },
-    username: { type: String, required: true, unique: true, lowecase: true }
+    username: { type: String, required: true, unique: true, lowecase: true },
+    description: { type: String, maxLength: 50 }
   },
   { timestamps: true }
 );

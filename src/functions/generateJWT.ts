@@ -22,17 +22,14 @@ const signJWT = (
         } else if (token) {
           callback(null, token);
         }
-        console.log(error, token);
+        console.log("JWT", error, token);
       }
     );
-    console.log(2);
   } catch (error) {
     if (error instanceof Error) {
-      console.log(3);
       console.log(error.message);
       callback(error, null);
     } else {
-      console.log(4);
       callback(new Error("Unexpected error"), null);
     }
   }
