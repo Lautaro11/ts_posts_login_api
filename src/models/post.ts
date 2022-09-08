@@ -2,12 +2,11 @@ import { Schema, model } from "mongoose";
 
 const PostSchema = new Schema(
   {
-    title: { type: String, required: true },
-    url: { type: String, required: true, lowecase: true },
-    content: { type: String, required: true },
-    owner: {
+    title: { type: String},
+    ownerId: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
+      require: true,
     },
     image: String,
   },

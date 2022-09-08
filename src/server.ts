@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import compression from "compression";
 import cors from "cors";
 import userRoutes from "./routes/user";
+import postRoutes from "./routes/post";
 
 class Server {
   public app: express.Application;
@@ -42,6 +43,7 @@ class Server {
 
   routes() {
     this.app.use("/api/user", userRoutes);
+    this.app.use("/api/post", postRoutes);
   }
 
   start() {
