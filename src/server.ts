@@ -32,6 +32,7 @@ class Server {
   }
 
   async mongo() {
+  
     const MONGO_URI =
       process.env.MONGO_URI || "mongodb://localhost/posts_login_project";
     try {
