@@ -22,7 +22,6 @@ class Server {
   config() {
     //Mongo
     this.app.set("port", process.env.MONGO_PORT || 3000);
-    this.mongo();
     //Middelwares
     this.app.use(morgan("dev"));
     this.app.use(express.json());
@@ -30,18 +29,13 @@ class Server {
     this.app.use(helmet());
     this.app.use(compression());
     this.app.use(cors());
+    this.mongo();
   }
 
   mongo() {
     const MONGO_URI =
       process.env.MONGO_URI || "mongodb://localhost/posts_login_project";
-    try {
-      console.log(MONGO_URI);
-      mongoose.connect(MONGO_URI);
-      console.log("DB is connected");
-    } catch (error) {
-      console.log("ERROR CONNECTING TO MONGODB", error);
-    }
+      mongoose.connect(MONGO_URI).then((db) => console.log("DB is connected"));
   }
 
   routes() {
