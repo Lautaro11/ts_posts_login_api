@@ -5,7 +5,6 @@ import Post from "../models/post";
 import signJWT from "../functions/generateJWT";
 import { validationResult } from "express-validator";
 import getUser from "../functions/getUser";
-import user from "../models/user";
 
 const register = async (req: Request, res: Response) => {
   const errors = validationResult(req);
