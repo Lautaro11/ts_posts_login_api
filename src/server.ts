@@ -1,5 +1,4 @@
 import express from "express";
-import * as dotenv from "dotenv";
 import morgan from "morgan";
 import helmet from "helmet";
 import mongoose from "mongoose";
@@ -13,15 +12,15 @@ class Server {
   public app: express.Application;
 
   constructor() {
-    dotenv.config();
+    require("dotenv").config();
     this.app = express();
     this.config();
     this.routes();
   }
 
   config() {
-    //Mongo
-    this.app.set("port", process.env.MONGO_PORT || 3000);
+    this.app.set("port", process.env.PORT || 3000);
+    this.mongo();
     //Middelwares
     this.app.use(morgan("dev"));
     this.app.use(express.json());
@@ -29,14 +28,12 @@ class Server {
     this.app.use(helmet());
     this.app.use(compression());
     this.app.use(cors());
-    this.mongo();
   }
 
   async mongo() {
     const MONGO_URI =
       process.env.MONGO_URI || "mongodb://localhost/posts_login_project";
     try {
-      console.log(MONGO_URI);
       await mongoose.connect(MONGO_URI);
       console.log("DB is connected");
     } catch (error) {
@@ -52,9 +49,9 @@ class Server {
 
   start() {
     this.app.listen(process.env.PORT || 3000, () => {
-      console.log("Server on port", process.env.PORT || 3000);
-   });
-  }
+       console.log("Server on port", process.env.PORT || 3000);
+    });
+ }
 }
 
 const server = new Server();
