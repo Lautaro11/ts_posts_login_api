@@ -7,6 +7,7 @@ import cors from "cors";
 import indexRoutes from "./routes/index"; 
 import userRoutes from "./routes/user";
 import postRoutes from "./routes/post";
+require("dotenv").config();
 
 class Server {
   public app: express.Application;
