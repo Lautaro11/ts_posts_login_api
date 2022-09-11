@@ -1,4 +1,5 @@
 import express from "express";
+import * as dotenv from "dotenv";
 import morgan from "morgan";
 import helmet from "helmet";
 import mongoose from "mongoose";
@@ -7,12 +8,12 @@ import cors from "cors";
 import indexRoutes from "./routes/index"; 
 import userRoutes from "./routes/user";
 import postRoutes from "./routes/post";
-require("dotenv").config();
 
 class Server {
   public app: express.Application;
 
   constructor() {
+    dotenv.config();
     this.app = express();
     this.config();
     this.routes();
