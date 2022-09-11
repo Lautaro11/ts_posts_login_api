@@ -62,7 +62,7 @@
                     "value": {
                       "id": "string",
                       "username": "string",
-                      "password": "stringst",
+                      "password": "string",
                       "description": "string"
                     }
                   }
