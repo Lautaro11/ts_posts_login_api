@@ -4,9 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node ./build/server.js",
     "ts": "tsc -w",
-    "dev": "nodemon ./build/server.js"
+    "dev": "nodemon ./build/server.js",
+    "start": "tsc && node ./build/server.js"
   },
   "keywords": [],
   "author": "Lautaro Robles",
