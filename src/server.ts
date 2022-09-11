@@ -18,6 +18,7 @@ class Server {
   }
 
   config() {
+    //Mongo
     this.app.set("port", process.env.MONGO_PORT || 3000);
     this.mongo();
     //Middelwares
