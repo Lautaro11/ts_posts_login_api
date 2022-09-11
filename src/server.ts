@@ -34,7 +34,8 @@ class Server {
     const MONGO_URI =
       process.env.MONGO_URI || "mongodb://localhost/posts_login_project";
     try {
-      await mongoose.connect(MONGO_URI);
+      const m = await mongoose.connect(MONGO_URI);
+      console.log(m);
       console.log("DB is connected");
     } catch (error) {
       console.log("ERROR CONNECTING TO MONGODB", error);
