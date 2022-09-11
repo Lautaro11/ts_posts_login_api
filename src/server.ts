@@ -32,12 +32,12 @@ class Server {
     this.app.use(cors());
   }
 
-  async mongo() {
+  mongo() {
     const MONGO_URI =
       process.env.MONGO_URI || "mongodb://localhost/posts_login_project";
     try {
       console.log(MONGO_URI);
-      await mongoose.connect(MONGO_URI);
+      mongoose.connect(MONGO_URI);
       console.log("DB is connected");
     } catch (error) {
       console.log("ERROR CONNECTING TO MONGODB", error);
