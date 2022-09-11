@@ -4,6 +4,8 @@ import User from "../models/user";
 import Post from "../models/post";
 import signJWT from "../functions/generateJWT";
 import { validationResult } from "express-validator";
+import getUser from "../functions/getUser";
+import user from "../models/user";
 
 const register = async (req: Request, res: Response) => {
   const errors = validationResult(req);
@@ -68,7 +70,16 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getUser = async (req: Request, res: Response, next: NextFunction) => {
+const fetchUsers = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const users = await User.find({}, { password: 0, updatedAt: 0, __v: 0 });
+    return res.json(users);
+  } catch (error) {
+    return res.status(500).json({ errors: "Unexpected error" });
+  }
+};
+
+const getUserId = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
 
   if (!id) {
@@ -76,16 +87,48 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const user = await User.find({ _id: id }, { _id: 0, username: 1 });
-    return res.json(user);
+    await getUser(id, (_error, user) => {
+      if (_error) {
+        return res.status(406).json({ errors: _error.message });
+      }
+      if (user) {
+        return res.status(200).json(user);
+      }
+    });
   } catch (error) {
-    return res.status(406).json({ errors: "User does not exist" });
+    return res.status(500).json({ errors: "Unexpected error" });
+  }
+};
+
+const getMyUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await getUser(res.locals.jwt.id, (_error, user) => {
+      if (_error) {
+        return res.status(406).json({ errors: _error.message });
+      }
+      if (user) {
+        return res.status(200).json(user);
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({ errors: "Unexpected error" });
   }
 };
 
 const updateUser = async (req: Request, res: Response, next: NextFunction) => {
   const userId = res.locals.jwt.id;
-  const toUpdate = req.body;
+  const { username, description } = req.body;
+  let toUpdate = [];
+
+  if (!(username || description)) {
+    return res.status(400).json({ errors: "At least one field is required." });
+  }
+  if (username && username.length > 0) {
+    toUpdate.push(username);
+  }
+  if (description && description.length > 0) {
+    toUpdate.push(description);
+  }
 
   try {
     const updatedUser = await User.findOneAndUpdate({ _id: userId }, toUpdate, {
@@ -93,13 +136,13 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
     });
     return res.json(updatedUser);
   } catch (error) {
-    return res.status(406).json({ errors: "Unexpected error" });
+    return res.status(500).json({ errors: "Unexpected error" });
   }
 };
 
 const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   const userId = res.locals.jwt.id;
-  console.log("Delete UserId: ",userId);
+  console.log("Delete UserId: ", userId);
 
   try {
     const deletedPosts = await Post.deleteMany({ ownerId: userId });
@@ -107,11 +150,15 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
     console.log("Deleted Posts: ", deletedPosts);
     return res.json(`${deletedUser} was deleted successfully`);
   } catch (error) {
-    return res.status(406).json({ errors: "Unexpected error" });
+    return res.status(500).json({ errors: "Unexpected error" });
   }
 };
 
-const validateToken = async (req: Request, res: Response, next: NextFunction) => {
+const validateToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   console.log("Validate Token: ", res.locals.jwt);
 
   return res.status(200).json({
@@ -122,8 +169,10 @@ const validateToken = async (req: Request, res: Response, next: NextFunction) =>
 export default {
   register,
   login,
-  getUser,
+  getUserId,
   updateUser,
   deleteUser,
   validateToken,
+  fetchUsers,
+  getMyUser,
 };

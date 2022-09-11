@@ -4,6 +4,7 @@ import helmet from "helmet";
 import mongoose from "mongoose";
 import compression from "compression";
 import cors from "cors";
+import indexRoutes from "./routes/index"; 
 import userRoutes from "./routes/user";
 import postRoutes from "./routes/post";
 
@@ -20,7 +21,7 @@ class Server {
     this.app.set("port", process.env.MONGO_PORT || 3000);
     this.mongo();
     //Settings
-    this.app.set("port", process.env.PORT || 4000);
+    this.app.set("port", process.env.PORT || 3000);
     //Middelwares
     this.app.use(morgan("dev"));
     this.app.use(express.json());
@@ -42,6 +43,7 @@ class Server {
   }
 
   routes() {
+    this.app.use("/", indexRoutes);
     this.app.use("/api/user", userRoutes);
     this.app.use("/api/post", postRoutes);
   }
