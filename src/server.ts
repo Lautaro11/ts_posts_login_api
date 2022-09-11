@@ -18,6 +18,7 @@ class Server {
   }
 
   config() {
+    this.app.set("port", process.env.MONGO_PORT || 3000);
     this.mongo();
     //Settings
     this.app.set("port", process.env.PORT || 3000);
