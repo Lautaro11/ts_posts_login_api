@@ -20,8 +20,6 @@ class Server {
   config() {
     this.app.set("port", process.env.MONGO_PORT || 3000);
     this.mongo();
-    //Settings
-    this.app.set("port", process.env.PORT || 3000);
     //Middelwares
     this.app.use(morgan("dev"));
     this.app.use(express.json());
@@ -49,9 +47,9 @@ class Server {
   }
 
   start() {
-    this.app.listen(this.app.get("port"), () => {
-      console.log("Server on port", this.app.get("port"));
-    });
+    this.app.listen(process.env.PORT || 3000, () => {
+      console.log("Server on port", process.env.PORT || 3000);
+   });
   }
 }
 
