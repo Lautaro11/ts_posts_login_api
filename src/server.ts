@@ -32,10 +32,16 @@ class Server {
     this.mongo();
   }
 
-  mongo() {
+  async mongo() {
     const MONGO_URI =
       process.env.MONGO_URI || "mongodb://localhost/posts_login_project";
-      mongoose.connect(MONGO_URI).then((db) => console.log("DB is connected"));
+    try {
+      console.log(MONGO_URI);
+      await mongoose.connect(MONGO_URI);
+      console.log("DB is connected");
+    } catch (error) {
+      console.log("ERROR CONNECTING TO MONGODB", error);
+    }
   }
 
   routes() {
