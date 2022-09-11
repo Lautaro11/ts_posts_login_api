@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "https://typescript-posts-login.herokuapp.com/api"
+      "url": "http://typescript-posts-login.herokuapp.com/api"
     },
     {
       "url": "http://localhost:3000/api"

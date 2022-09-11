@@ -18,7 +18,6 @@ class Server {
   }
 
   config() {
-    this.app.set("mongoPort", process.env.MONGO_PORT || 3000);
     this.mongo();
     //Settings
     this.app.set("port", process.env.PORT || 3000);
@@ -32,7 +31,6 @@ class Server {
   }
 
   async mongo() {
-  
     const MONGO_URI =
       process.env.MONGO_URI || "mongodb://localhost/posts_login_project";
     try {
